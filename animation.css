@@ -1,0 +1,286 @@
+
+/* =========================================
+   SWIFTSPARROW ANIMATION
+========================================= */
+
+:root {
+    --canvas: #FAF8F6;
+    --coral: #FF705E;
+    --soft-coral: #FFAB94;
+    --mist: #F5EDE9;
+    --carbon: #191919;
+    --ink: #111111;
+    --muted: #77716E;
+}
+
+
+/* RESET */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+html {
+    background: var(--mist);
+}
+
+body {
+    overflow-x: hidden;
+    background: var(--mist);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.has-intro,
+.has-intro body {
+    overflow: hidden;
+}
+
+
+/* =========================================
+   WEBSITE BACKGROUND
+========================================= */
+
+.site-preview {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+
+    background: var(--mist);
+
+    opacity: 1;
+    visibility: visible;
+
+    transition:
+        opacity 350ms ease,
+        visibility 350ms ease;
+}
+
+.has-intro .site-preview {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.has-intro .site-preview.is-revealed {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+
+/* =========================================
+   INTRO OVERLAY
+========================================= */
+
+.intro-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    overflow: hidden;
+    isolation: isolate;
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   ZIPPER PANELS
+========================================= */
+
+.zipper-panels {
+    position: absolute;
+    inset: 0;
+
+    z-index: 1;
+
+    overflow: hidden;
+    pointer-events: none;
+}
+
+
+/* Each upper and lower panel pair */
+
+.zipper-strip {
+    position: absolute;
+
+    height: 50.2%;
+
+    background: var(--canvas);
+
+    will-change: transform;
+
+    transition:
+        transform var(--panel-duration, 650ms)
+        cubic-bezier(0.76, 0, 0.24, 1);
+
+    /* Important: no independent stagger delay */
+    transition-delay: 0ms !important;
+}
+
+
+/* Upper half */
+
+.zipper-strip-top {
+    top: 0;
+}
+
+
+/* Lower half */
+
+.zipper-strip-bottom {
+    bottom: 0;
+}
+
+
+/* Individual upper panel opens upwards */
+
+.zipper-strip-top.is-open {
+    transform: translate3d(0, -110vh, 0);
+}
+
+
+/* Individual lower panel opens downwards */
+
+.zipper-strip-bottom.is-open {
+    transform: translate3d(0, 110vh, 0);
+}
+
+
+/* =========================================
+   DOTS
+========================================= */
+
+.zipper-dots {
+    position: absolute;
+    inset: 0;
+
+    z-index: 3;
+
+    overflow: hidden;
+    pointer-events: none;
+}
+
+
+/* Individual dot */
+
+.zip-dot {
+    position: absolute;
+    top: 50%;
+
+    width: var(--dot-size, 12px);
+    height: var(--dot-size, 12px);
+
+    border-radius: 50%;
+
+    background: var(--coral);
+
+    opacity: 1;
+
+    transform: translate(-50%, -50%) scale(1);
+
+    animation:
+        dot-pulse
+        var(--dot-pulse-duration, 240ms)
+        ease-in-out
+        both;
+
+    transition:
+        opacity var(--dot-fade-duration, 550ms) ease;
+
+    will-change: transform, opacity;
+}
+
+
+/* Individual fade */
+
+.zip-dot.is-fading {
+    opacity: 0;
+}
+
+
+/* Pulse */
+
+@keyframes dot-pulse {
+
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    28% {
+        transform: translate(-50%, -50%) scale(2);
+    }
+
+    62% {
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+}
+
+
+/* =========================================
+   MOTORCYCLE
+========================================= */
+
+.zipper-bike {
+    position: absolute;
+
+    top: 50%;
+    left: 0;
+
+    width: clamp(100px, 68vw, 300px);
+    height: auto;
+
+    max-width: none;
+
+    z-index: 4;
+
+    transform: translate(-50%, -50%);
+
+    pointer-events: none;
+    user-select: none;
+
+    will-change: left;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .zipper-bike {
+        width: clamp(280px, 88vw, 440px);
+    }
+
+}
+
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .zipper-strip,
+    .zip-dot,
+    .zipper-bike,
+    .site-preview {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+
+}
